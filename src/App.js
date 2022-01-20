@@ -4,6 +4,7 @@ import { Tasks } from "./components/Tasks";
 import { AddTask } from "./components/AddTask";
 import "./App.css";
 function App() {
+  const [showAddTask, setShowAddTask] = useState(false);
   const [tasks, setTasks] = useState([
     {
       id: 1,
@@ -25,6 +26,16 @@ function App() {
     },
   ]);
 
+  // Add task
+
+  const addTask = (task) => {
+    //  Generating random id
+    const id = Math.floor(Math.random() * 10000) + 1;
+    const newTask = {id, ...task};
+    setTasks([...tasks, newTask]) // Copying the task that are already there, but adding newTask.
+
+  };
+
   // Delete task
   const deleteTask = (id) => {
     setTasks(tasks.filter((task) => task.id !== id));
@@ -42,8 +53,8 @@ function App() {
   };
   return (
     <div className="container">
-      <Header />
-      <AddTask />
+      <Header onAdd={() => setShowAddTask(!showAddTask)} showAdd={showAddTask} />
+      {showAddTask && <AddTask onAdd={addTask} />}
       {tasks.length > 0 ? (
         <Tasks tasks={tasks} onDelete={deleteTask} onToggle={toggleReminder} />
       ) : (
